@@ -1,0 +1,20 @@
+<% layout('layouts/boilerPlate') %>
+<%- include('../partials/header') %> 
+<div class="row">
+        <% for(let item of products){ %>
+            <div class="col-lg-4 product-card">
+            <div class="card text-center shadow mt-3 mx-auto" style="width: 18rem;">
+                <img src="<%= item.img %>" class="card-img-top" alt="image">
+                <div class="card-body">
+                  <h2 class="card-title"><%= item.name %></h2>
+                  <h5 class="card-title">Price: <%= item.price %> RS.</h5>
+                  <p class="card-text"><%= item.desc %></p>
+                  <a href="products/<%= item._id%>" class="btn btn-primary">View</a>
+                  <form class="d-inline-block" action="/products/<%= item._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+        <% } %>
+</div>

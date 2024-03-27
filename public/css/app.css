@@ -1,0 +1,24 @@
+*{
+    max-width: 100%;
+    /* overflow-x: hidden; */
+}
+:root{
+    --main-color: #0077b6;
+}
+main{
+    margin-top: 5.5rem;
+}
+
+.img{
+    height: 200px;
+    width: 100%;
+
+}
+
+.product-card .btnn{
+    background-color: var(--main-color) ;
+}
+
+.height-300{
+    height: 350px;
+}

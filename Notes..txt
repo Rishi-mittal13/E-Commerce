@@ -1,0 +1,341 @@
+----------------------------------------------------------------------------------------------------------
+=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Backend Notes(RISHI MITTAL) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<=
+-----------------------------------------------------------------------------------------------------------
+
+// Topics :- Node , npm , express ,  middleware , routing , nodemon , 
+path and query Parameter , EJS , static files , Get vs POST , RestFUL Routing , 
+Mongo-DB , Mongoose for express . 
+
+
+-----------------------------------INTRO_NODE--------------------------------------
+
+// process.argv =>  your command line input .  
+// process.cwd =>  current working directory .//  jis folder par khade ho .  
+// __dirname :- jaha process run ho rha hai  .  
+//npm ->  node package manager , to install -i , and uninstall -un the package . 
+// npm init => to initialize the npm in your project folder . 
+//node modules should not be share anywhere . because of security and large amount of data .  
+//npm i -g "package-name" =>  to install a package globally .  in you node js .  (not preferable) ; 
+//rm -r folder :- to remove a folder , -r => recursive . 
+// -f flag :- forcefully delete .  
+
+
+-----------------------------------Express_INTRO--------------------------------- 
+
+// Express :- Express is a FrameWork  . Help To create and use Web Server . Easy and Modified  . 
+=> Express is made in Https . 
+=> First we have to require Express , than it return a function . 
+=> Ports are Required to run your Server => 2000 - 9000 Majority Ports . 
+=> Default Port =>  8080 . 
+=> localhost => local machine means your device . 
+
+=>middleware :-  Runs on Every Incoming Request . 
+=> app.use() :- work as middleware . and accept a callback function . we can specify a path or not . 
+
+
+
+------------------------------Routing-------------------------------------------------------- 
+
+=>https methods :- get , post , delete  , patch , put  . 
+// if we send a request than these depend upon 2 thing 1). method => get , post etc . 2). path 
+// "/" default path . 
+// "get" default method . 
+// "*" universal selector in the place of path  .  
+=> Nodemon :- it Automatically restart you web application server when server is detected in your application . 
+=> npm i nodemon . // add the path of your main file in package.json in script a start key with path in object . 
+=> to start nodemon  :-  npm start  /  npx nodemon  . 
+
+
+//path and Query Parameter . 
+//path Parameter (:)
+r/:id =.  subredit.
+req.params (object) : - path of of subreddit . 
+// destructure of object of particular key :-  let {key} =  object .  
+
+//query Parameter (?) 
+=> to get query we use req.query.query_var. 
+//eg. http://localhost:8080/detail?name=rishi&age=20
+
+
+
+
+---------------------------Templating--------------------------------------------
+
+=>  use same structure of page ony just change the data init . 
+// view , ejs . 
+Templating engine :-  ejs , jade , hbs . 
+// ejs => embedded javascript // https://ejs.co/ . 
+ejs use to see template . 
+all templating file will be in views folder. 
+//to set the ejs . 
+app.set("view engine" , "ejs") ; // to set the templating engine . like ejs .  
+app.set("views"  , path.join(__dirname , "view")) //  to connect a path with your view folder .
+Note:  you will write least possible logic thing in ejs try to do that in js file . 
+
+=> res.render("your ejs file name" , {var}) //  var is optional .  it is use to send the data in ejs file . 
+
+=> tags in ejs . 
+1). <%   %>  => for javascript thing like for loop if else etc . 
+2).  <%= %> => to evalute some value like variable . 
+3). <%- %> =>  in header And Footer .  
+
+
+--------------------static Files--------------------------------------------------------
+static files like js , css ,  image . that is present in public folder .  
+we can name it public or not it is convention not compulsory .  
+to use static files => app.use(express.static(path.join(__dirname , "public"))) . 
+
+=> header and footer is same in most of the template so we use that without redunduncy .
+<%- include("./partials/header.ejs") %>
+<%- include("./partials/footer.ejs") %> 
+=>  header and footer are present in form of ejs in partrials file . 
+
+
+----*IMP* GET VS POST---
+=>GET :- 
+        -> This is use to retrieve and fetch the data . 
+        -> here data is available as in url as query Parameter . 
+        -> less secure because data is visible .  
+        -> data sent using get is plane string because it is in query parameter 
+        -> limited amount of data is sent . i.e 4096 bits . 
+        -> here data is available in req.params . 
+
+=>POST :- 
+        -> this should be use we have to change something in database/server . 
+        -> here data is available in req.body .  
+        -> more secure(urlX) ; 
+        -> data of different type is sent  text , xml , json .  
+        -> huge - huge amount of data can be sent .  
+//  by default it is undefined so we use middleware  that is show below . 
+// app.use(express.json()) // for parsing application/json
+// app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+
+---------------------------RESTFUL Routing----------------------------------------------------------------
+=> RestFULL routing    .  
+Representational State Transfer which provides a way of mapping HTTP verbs 
+(get, post, put, delete) and CRUD actions (create, read, update, delete) together.
+=>  it is convention not compulsory . 
+
+TABLE => 
+____________________________________________________________________________________________________
+|Rout Name       |       URL        |     HTTP VERB      |        Description                       |
+|----------------|------------------|--------------------|------------------------------------------|
+|Index           |    /blogs        |      GET           | Display a list of all blogs .            |
+|New             |    /blogs/new    |      GET           | Show form to make new blogs .            |
+|Create          |    /blogs        |      POST          | Add new blog to database, then redirect .| 
+|Show            |    /blogs/:id    |      GET           | Show info about one blog .               |
+|Edit            |    /blogs:id/edit|      GET           | Show edit form of one blog .             |
+|Update          |    /blogs:id     |      PUT           | Update a particular blog, then redirect .| 
+|Destroy         |    /blogs:id     |      DELET         | Delete a particular blog, then redirect .| 
+|________________|__________________|____________________|__________________________________________|
+
+=> put/patch => update .  also in delete . 
+method-override is used to patch the data . from post method in form  . 
+<form action="/blogs/<%= foundBlog.id %>?_Method=PATCH" method="POST">
+const methodOverride = require('method-override');
+app.use(methodOverride('_Method'))
+
+<form action="/comments/<%= item.id %>?_method=DELETE" method="POST">
+                <button>Delete</button>
+</form>
+
+
+-----------------------------------------------DataBases------------------------------------------------------------------------
+DataBases :-  collection of similial Types of Data .  
+why we does'nt use file system =>  Because of data redunduncy  ,  ineffieciency , security purpose ,  and searching . 
+Types of database 1).  SQL , 2). NoSQL . 
+* SQL is Language  . 
+SQL DataBase :- wo databases jo result/output show karane ke liye sql ka use karte hai  .   
+DBMS :- DataBase management System . 
+Types of DBMS :-  1).  RDBMS  ,  2).  NRDBMS . 
+=> RDBMS :- in which table are present ,  in which data are related .  
+
+=> NRDBMS :- no table is present , in which data are not related . 
+=> NoSQL databases store the data in form of json .(key and value store in the form of string) . 
+=>we choose the databases by using CAP theorem :- 1).  consisitency , 2). availablity , 3). Partion Tolerence . 
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------MONGO-DB-----------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+Why MongoDB :- 
+
+
+MONGO DB ===> 
+=> mongosh => to open mongo db shell in cmd (REPL) . 
+1 show databases; show dbs
+2. use gla --> ye case sensitive hota h like(GLa and GLA and gla all are different)
+agr database exist kr rha h toh woh use hone lgega and agar nhi h toh woh create ho jaayega.
+3. jb tk db k andr collection nhi hogi tb tk wo list m exist nhi krega.
+4. collection-- Multiple doc hote h usme
+5. db :-  show the current working directory .  
+6. db.createCollection('name') :- create a collection in current database . 
+7. show collections  :-  lists all collections in your db  . 
+8. db.dropDatabase() 😱😱😱 :- pura database ka career ek hi baar me khatam . 
+9. exit / ctr+c (2 times ):-  to exit mongo working directory  . 
+10.db.collectionName.find() :- returns all the documents from collection 😄 . 
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+=>> CRUD Operations :-
+ 
+1). Create :- db.collectionName.insertOne({some key : value pair }) //whenever you create a object than mongodb gives you a objectID
+to uniquely identify that object .  
+=> to Insert many object :- db.collectionName.insertMany([{first object } , {second object } , {third object }]) // [] ->  array of object . 
+// and gives unique objectID for  all object in array . 
+
+
+2). Read :- 
+=> db.collectionName.find() :- returns all the documents from collection 😄 . 
+// you can also give query in find() . eg. db.collectionName.find(isWatched:true , imdb : 9) // give all object which 
+// has isWatched true and imdb is 9 .  
+
+
+3).Update :-  
+=> db.collectionName.updateOne({find object } { updated object }) => only one object is changed first Encounterd Query . 
+//  eg. db.movie.updateOne({imdb:9} {$set : {isWatched : false}) 
+
+// it change first encounterd movie to isWatched false which have imdb rating is 9 .  
+=> db.collectionName.updateMany({find object } { updated object }) => if multiple object encounterd this find object query .  
+//  all will changed  . 
+
+
+4).Delete 😱(Dekhke use karne ka isko ):-
+=> db.collectionName.deleteOne() -> this command not exist .  
+=> db.collectionName.deleteOne({}) ->  delete first occurence object.
+=> db.collectionName.deleteMany({}) 😲->  delete all object in database . 
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+==>> Operators :- 
+db.collectionName.find({imdb : {$gt:6.5}}) => return all the object which have greater than 6.5 rating . 
+-> $gt :- greater than .
+-> $gte :- greater than equal to  . 
+-> $lt :- less than . 
+-> $lte :-  less than equal .  
+-> $and :- eg. db.movies.find({$and : [{imdb : {$gte:6}} , {imdb: {$lte:7}}]}) .
+-> $or :- OR Logical Operator. 
+-> $in :-  give the array of value s. 
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+=> in database data is store in the form of BSON .
+BSON :-  BSON stands for “Binary JSON,” and that’s exactly what it was invented to be.
+BSON’s binary structure encodes type and length information, which allows it to be traversed much more quickly compared to JSON. 👌
+
+JSON :- JSON, or JavaScript Object Notation, is a human-readable data interchange format, specified in the early 2000s. 
+Even though JSON is based on a subset of the JavaScript programming language standard, it’s completely language-independent. 👍
+
+orm(sql) :- object relational model 
+
+(mangoose)/odm(object document model , NoSQL) : - it is like a layer which converts js to json and json to js .  
+from server(express)  to database and database to server(express). we use mongoose for that . 
+ 
+=================> MONGOOSE <================================= 
+=> npm i mongoose to install and then require mongoose .
+=>  Every Mongoose fxn returns a promise so we have to use async , await to eliminate this .  
+onst mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/test') // it returns a promise(resolve , reject) ; 
+.then(()=>{console.log("DB Connected Sucessfully")})
+.catch(()=>{console.log("Some error ocuure)}) ; 
+
+
+
+
+=> mongoose.model(modelName, schema):
+=> const schemaName = new Schema({
+	schema objects.. 😉
+});
+=>  schemaName.save() ; 
+=> also we can use insertMany , insertOne , create fxn to insert data (this fxn automatically use save fxn) ; 
+
+=> After making schema and model we simply run the code and open model collection in mongo shell 😎 . 
+
+=>  Now inserting a new Document in collection acording to the schema 🙂 . 
+new ModelName({schema data }) . 
+
+=> mongoose middleware . :- for every mongoose fxn like deleteById etc middleware is called defaultly .  so we can 
+create by using pre and post like routeName.post('anyname' , callbackFxn) ; 
+ 
+
+---------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------GIT(Version-control-system)--------------------------------------------------------------
+SOME BASH command : - ls , cd ,  ls -a , mkdir ,  cd.. , rmdir , rm , d: , touch , 
+Git =>  Version control system . 
+vcs use to keep track history of project and work with team . 
+=>  two types of vcs :-  1). centralised vcs ,  2). distributed vcs . 
+
+=> centralised vcs :- code is present at one place and anything change done by any person that changes reflacted in project (online).
+=> we require internet for that always .  
+exa:-  google sheets .  
+
+=> distributed vcs :- original code is present to head and any who want to change something in that code they can do by copying that code
+the changes is not reflated in original code .  
+
+
+//basic - commands 
+1). git --version :- tell's the about the git version that install in your system . 
+
+
+//configuring git . 
+
+1). git config --global user.name "username"
+2). git config --global user.email "useremail"
+3). git config --list :- display about the details about the current user of git that made changes in a project .  
+
+//cloning a git repo .  in current folder .
+1). git clone "https link of repo" 
+2). git init : - initialize an existing directory as a Git repository
+3). git remote add origin "link" :- adding a repo in your current repo . 
+
+//git staging . 
+1) . git status :- show modified files in working directory, staged for your next commit
+2). git add . :- add all new file and modified content in to staging area . 
+3). git commit -m "discriptive message"
+4). git restore filename :- to unstage any file that is staged . 
+
+
+
+//git push :- to push your changes in main branch of git . 
+1). git push origin main / git push -u origin main:-  to push local content to remote content that is github repo . 
+
+
+//git branches :- 
+1). git branches :- give the name of all branches you create for a particular repo . 
+2). git checkout branch_name :- to change the branch by give their name.  
+3). git branch -m old_branchname new_branchname . 
+
+--------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------
+
+ejs-mate : - partial and block template functions for the EJS template engine.
+if we not use it then a default engine is work that present in express .
+
+=> you have to make sure middleware should be added before posting any data .  
+=> to view data in form we use value in input in form . 
+=>we have to use method-Override to patch and put Operation , so install and required    . 
+eg. action="/products/<%= foundProduct._id?_method = PATCH%>" 
+
+=> if you want to send your data of form so , you have to add a button tag with submit type in form tag  . 
+
+
+Validation:- 1). client side validation :-  related to form at client side mainly done by bootstrap and 
+2). server side validation .  :- validate model requirement in server side .  
+
+
+JOI:- it's a Server Side validator .  The most powerful schema description language
+and data validator for JavaScript 
+
+cookies and session  :- 
+
+============================================================================================================================>
+
+
