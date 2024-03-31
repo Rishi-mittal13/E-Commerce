@@ -28,6 +28,7 @@ router.post('/products' , validateProduct , async  (req , res)=>{
     try{
         let {name ,  price ,  img , desc} =  req.body ;  
         await Product.create({name ,  price ,  img , desc});
+        req.flash('success' , 'Product Added Successfully') ; 
         res.redirect("/products") ; 
     }
     catch(e){
@@ -40,7 +41,7 @@ router.get("/products/:id" ,  async (req , res)=>{
     try{
         let {id} =  req.params   ; 
         let foundProduct =  await Product.findById(id).populate('reviews'); 
-        res.render('products/show' , {foundProduct}) ; 
+        res.render('products/show' , {foundProduct }) ; 
     }
     catch(e){
         res.status(500).render('error' , {err:e.message}) ; 
@@ -65,12 +66,13 @@ router.patch("/products/:id" , validateProduct ,  async (req , res)=>{
         let {id} = req.params  ; 
         let {name ,  price ,  img , desc} =  req.body ; 
         await Product.findByIdAndUpdate(id , {name ,  price ,  img , desc});
+        req.flash('success' , 'Product Edited Successfully') ; 
         res.redirect(`/products/${id}`) ; 
     }
     catch(e){
         res.status(500).render('error' , {err:e.message}) ; 
     }
-});
+})
 
 //to delete any product . 
 
@@ -78,10 +80,11 @@ router.delete("/products/:id" , async (req , res)=>{
     try{
         let {id} = req.params ; 
         await Product.findByIdAndDelete(id);
+        req.flash('success' , 'Product Deleted Successfully') ; 
         res.redirect('/products') ; 
     }
     catch(e){
-        res.status(500).render('error') ;         res.status(500).render('error' , {err:e.message}) ; 
+        res.status(500).render('error' , {err:e.message}) ; 
     }
 })
 

@@ -1,9 +1,10 @@
 <% layout('layouts/boilerPlate') %>
 <%- include('../partials/header') %> 
-<h1>Editing Product Detail</h1> 
+<%- include('../partials/flash') %> 
 
+<h1 class='mb-5'>Editing Product Detail</h1> 
 <div class = 'row mx-auto' >
-    <h2>Create New Products</h2>
+    <!-- <h2>Create New Products</h2> -->
     <form action="/products/<%= foundProduct._id%>?_method=PATCH" class="needs-validation" method="POST" id = "frm" novalidate >
         <div class="mb-3">
           <label for="Name" class="form-label">Name Of Product</label>
@@ -42,9 +43,6 @@
         <button type="submit" class="btn btn-primary">Update Product Data </button>
       </form>
 </div>
-
-
-
 <body>
   <script>
     (() => {
