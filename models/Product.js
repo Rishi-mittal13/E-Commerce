@@ -29,12 +29,6 @@ let productSchema =  new mongoose.Schema({
 
 })
 
-productSchema.post('findOneAndDelete' , async function(product){
-    if(product.reviews.length>0){
-        await Review.deleteMany({_id:{$in:product.reviews}}) ; 
-    }
-
-})
 
 //middleware for mongoose fxn . 
 productSchema.post('findOneAndDelete' , async function(product){
