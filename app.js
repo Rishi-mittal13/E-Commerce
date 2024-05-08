@@ -31,17 +31,20 @@ app.use(express.static(path.join(__dirname ,'public'))) ; // public folder .
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method')) ;  
 app.use(flash()) ; 
-
-
 app.use(session(configsession)) ; 
-
-
-
 app.use((req , res , next)=>{
+    res.locals.currentUser = req.user; 
     res.locals.success = req.flash('success') ;
     res.locals.error = req.flash('error') ;
     next() ;
 })
+//products route . 
+app.use(productsRoutes) ; 
+//review routes . 
+app.use(reviewRoutes) ;
+//auth routes . 
+app.use(authRoutes) ; 
+
 
 
 
@@ -49,12 +52,6 @@ app.get('/' , (req , res)=>{
     res.send('Root me apka swagat hai ') ;
 })
 
-//products route . 
-app.use(productsRoutes) ; 
-//review routes . 
-app.use(reviewRoutes) ;
-//auth routes . 
-app.use(authRoutes) ; 
 
 
 //passport
